@@ -20,11 +20,11 @@ function fetchUserId() {
 
 function generateMockResults() {
     const mockResults = [];
-    for (let i = 1; i <= 50; i++) {
+    for (let i = 1; i <= 200; i++) {
         mockResults.push({
             ip: `192.168.1.${i}`,
             userId: `user${i}`,
-            traffic: Math.floor(Math.random() * 100) + 1 // トラフィック量を1から100 Mbpsの範囲でランダムに設定
+            traffic: Math.floor(Math.random() * 1000) + 1 // トラフィック量を1から1000 Mbpsの範囲でランダムに設定
         });
     }
     return mockResults;
@@ -53,32 +53,38 @@ function executeSearch() {
     }
 
     // 検索結果の表示
-    let resultsHtml = `
-        <table>
-            <thead>
-                <tr>
-                    <th>IPアドレス</th>
-                    <th>ユーザID</th>
-                    <th>トラフィック量 (Mbps)</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
+    let resultsHtml = '';
 
-    mockResults.slice(0, searchCount).forEach((result, index) => {
-        resultsHtml += `
-            <tr onclick="selectRow(this)" data-index="${index}">
-                <td>${result.ip}</td>
-                <td>${result.userId}</td>
-                <td>${result.traffic}</td>
-            </tr>
+    if (mockResults.length === 0) {
+        resultsHtml = '<p>指定したIPアドレスが検索結果に存在しません。</p>';
+    } else {
+        resultsHtml = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>IPアドレス</th>
+                        <th>ユーザID</th>
+                        <th>トラフィック量 (Mbps)</th>
+                    </tr>
+                </thead>
+                <tbody>
         `;
-    });
 
-    resultsHtml += `
-            </tbody>
-        </table>
-    `;
+        mockResults.slice(0, searchCount).forEach((result, index) => {
+            resultsHtml += `
+                <tr onclick="selectRow(this)" data-index="${index}">
+                    <td>${result.ip}</td>
+                    <td>${result.userId}</td>
+                    <td>${result.traffic}</td>
+                </tr>
+            `;
+        });
+
+        resultsHtml += `
+                </tbody>
+            </table>
+        `;
+    }
 
     document.getElementById('results').innerHTML = resultsHtml;
 }
