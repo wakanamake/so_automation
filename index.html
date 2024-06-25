@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webアプリケーション</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Webアプリケーション</h1>
+        <form id="searchForm">
+            <div class="form-group">
+                <label for="startDate">開始の日付</label>
+                <input type="date" id="startDate" name="startDate" required>
+            </div>
+            <div class="form-group">
+                <label for="endDate">終了の日付</label>
+                <input type="date" id="endDate" name="endDate" required>
+            </div>
+            <div class="form-group">
+                <label for="ipAddress">IPアドレス</label>
+                <input type="text" id="ipAddress" name="ipAddress" placeholder="任意">
+            </div>
+            <div class="form-group">
+                <label for="userId">ユーザID</label>
+                <input type="text" id="userId" name="userId" required>
+            </div>
+            <div class="form-group">
+                <label for="trafficThreshold">トラフィックしきい値 (Mbps)</label>
+                <input type="number" id="trafficThreshold" name="trafficThreshold" required>
+            </div>
+            <div class="form-group">
+                <label for="searchCount">検索件数</label>
+                <input type="number" id="searchCount" name="searchCount" required>
+            </div>
+            <div class="form-group">
+                <label for="searchTimeout">検索タイムアウト (秒)</label>
+                <input type="number" id="searchTimeout" name="searchTimeout" required>
+            </div>
+            <button type="button" onclick="executeSearch()">検索実行</button>
+            <button type="button" onclick="createStopSO()">停止SO作成</button>
+        </form>
+        <div id="results">
+            <h2>検索結果</h2>
+            <!-- 結果表示領域 -->
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
