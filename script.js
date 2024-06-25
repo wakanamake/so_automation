@@ -24,7 +24,7 @@ function generateMockResults() {
         mockResults.push({
             ip: `192.168.1.${i}`,
             userId: `user${i}`,
-            traffic: `${Math.floor(Math.random() * 100) + 1} Mbps`
+            traffic: Math.floor(Math.random() * 100) + 1 // トラフィック量を1から100 Mbpsの範囲でランダムに設定
         });
     }
     return mockResults;
@@ -35,12 +35,22 @@ function executeSearch() {
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
     const ipAddress = document.getElementById('ipAddress').value;
-    const trafficThreshold = document.getElementById('trafficThreshold').value;
-    const searchCount = document.getElementById('searchCount').value;
+    const trafficThreshold = parseInt(document.getElementById('trafficThreshold').value);
+    const searchCount = parseInt(document.getElementById('searchCount').value);
     const searchTimeout = document.getElementById('searchTimeout').value;
 
     // 仮の検索結果データを生成
-    const mockResults = generateMockResults();
+    let mockResults = generateMockResults();
+
+    // IPアドレスでフィルタリング
+    if (ipAddress) {
+        mockResults = mockResults.filter(result => result.ip === ipAddress);
+    }
+
+    // トラフィックしきい値でフィルタリング
+    if (!isNaN(trafficThreshold)) {
+        mockResults = mockResults.filter(result => result.traffic >= trafficThreshold);
+    }
 
     // 検索結果の表示
     let resultsHtml = `
@@ -49,7 +59,7 @@ function executeSearch() {
                 <tr>
                     <th>IPアドレス</th>
                     <th>ユーザID</th>
-                    <th>トラフィック量</th>
+                    <th>トラフィック量 (Mbps)</th>
                 </tr>
             </thead>
             <tbody>
@@ -76,10 +86,13 @@ function executeSearch() {
 function selectRow(row) {
     // 他の選択を解除
     const rows = document.querySelectorAll('#results tr');
-    rows.forEach(r => r.classList.remove('selected'));
 
-    // 選択をトグル
-    row.classList.add('selected');
+    if (row.classList.contains('selected')) {
+        row.classList.remove('selected');
+    } else {
+        rows.forEach(r => r.classList.remove('selected'));
+        row.classList.add('selected');
+    }
 }
 
 function createStopSO() {
@@ -97,5 +110,5 @@ function createStopSO() {
     const csvContent = `RADIUS, STP, ${userId}, MEGAEGG, ${timestamp}`;
     
     // アラートメッセージにCSVの内容を出力
-    alert(`SO内容:\n${csvContent}`);
+    alert(`SO内容：\n${csvContent}`);
 }
