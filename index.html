@@ -11,20 +11,16 @@
         <h1>Webアプリケーション</h1>
         <form id="searchForm">
             <div class="form-group">
-                <label for="startDate">開始の日付</label>
-                <input type="date" id="startDate" name="startDate" required>
+                <label for="startDate">開始の日付と時刻</label>
+                <input type="datetime-local" id="startDate" name="startDate" required>
             </div>
             <div class="form-group">
-                <label for="endDate">終了の日付</label>
-                <input type="date" id="endDate" name="endDate" required>
+                <label for="endDate">終了の日付と時刻</label>
+                <input type="datetime-local" id="endDate" name="endDate" required>
             </div>
             <div class="form-group">
                 <label for="ipAddress">IPアドレス</label>
-                <input type="text" id="ipAddress" name="ipAddress" placeholder="任意">
-            </div>
-            <div class="form-group">
-                <label for="userId">ユーザID</label>
-                <input type="text" id="userId" name="userId" required>
+                <input type="text" id="ipAddress" name="ipAddress" placeholder="任意" oninput="fetchUserId()">
             </div>
             <div class="form-group">
                 <label for="trafficThreshold">トラフィックしきい値 (Mbps)</label>
@@ -32,19 +28,19 @@
             </div>
             <div class="form-group">
                 <label for="searchCount">検索件数</label>
-                <input type="number" id="searchCount" name="searchCount" required>
+                <input type="number" id="searchCount" name="searchCount" value="30" required>
             </div>
             <div class="form-group">
                 <label for="searchTimeout">検索タイムアウト (秒)</label>
-                <input type="number" id="searchTimeout" name="searchTimeout" required>
+                <input type="number" id="searchTimeout" name="searchTimeout" value="60" required>
             </div>
             <button type="button" onclick="executeSearch()">検索実行</button>
-            <button type="button" onclick="createStopSO()">停止SO作成</button>
         </form>
         <div id="results">
             <h2>検索結果</h2>
             <!-- 結果表示領域 -->
         </div>
+        <button type="button" onclick="createStopSO()">停止SO作成</button>
     </div>
     <script src="script.js"></script>
 </body>
