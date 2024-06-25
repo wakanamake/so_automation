@@ -18,6 +18,18 @@ function fetchUserId() {
     console.log('User ID:', userId);
 }
 
+function generateMockResults() {
+    const mockResults = [];
+    for (let i = 1; i <= 50; i++) {
+        mockResults.push({
+            ip: `192.168.1.${i}`,
+            userId: `user${i}`,
+            traffic: `${Math.floor(Math.random() * 100) + 1} Mbps`
+        });
+    }
+    return mockResults;
+}
+
 function executeSearch() {
     // 検索ロジックの実装
     const startDate = document.getElementById('startDate').value;
@@ -27,12 +39,8 @@ function executeSearch() {
     const searchCount = document.getElementById('searchCount').value;
     const searchTimeout = document.getElementById('searchTimeout').value;
 
-    // 仮の検索結果データ
-    const mockResults = [
-        { ip: '192.168.1.1', userId: 'userA', traffic: '15 Mbps' },
-        { ip: '192.168.1.2', userId: 'userB', traffic: '10 Mbps' },
-        { ip: '192.168.1.3', userId: 'userC', traffic: '20 Mbps' }
-    ];
+    // 仮の検索結果データを生成
+    const mockResults = generateMockResults();
 
     // 検索結果の表示
     let resultsHtml = `
@@ -47,7 +55,7 @@ function executeSearch() {
             <tbody>
     `;
 
-    mockResults.forEach((result, index) => {
+    mockResults.slice(0, searchCount).forEach((result, index) => {
         resultsHtml += `
             <tr onclick="selectRow(this)" data-index="${index}">
                 <td>${result.ip}</td>
@@ -82,10 +90,12 @@ function createStopSO() {
         return;
     }
 
-    const ip = selectedRow.cells[0].textContent;
     const userId = selectedRow.cells[1].textContent;
-    const traffic = selectedRow.cells[2].textContent;
+    const now = new Date();
+    const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
 
-    // 停止SO作成ロジックの実装
-    alert(`停止SOが作成されました:\nIPアドレス: ${ip}\nユーザID: ${userId}\nトラフィック量: ${traffic}`);
+    const csvContent = `RADIUS, STP, ${userId}, MEGAEGG, ${timestamp}`;
+    
+    // アラートメッセージにCSVの内容を出力
+    alert(`SO内容:\n${csvContent}`);
 }
