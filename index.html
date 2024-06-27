@@ -3,44 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SO自動化連携システム</title>
+    <title>SO自動化システム</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>SO自動化連携システム</h1>
-        <form id="searchForm">
-            <div class="form-group">
-                <label for="startDate">開始の日付と時刻</label>
-                <input type="datetime-local" id="startDate" name="startDate" required>
-            </div>
-            <div class="form-group">
-                <label for="endDate">終了の日付と時刻</label>
-                <input type="datetime-local" id="endDate" name="endDate" required>
-            </div>
-            <div class="form-group">
-                <label for="ipAddress">IPアドレス</label>
-                <input type="text" id="ipAddress" name="ipAddress" placeholder="任意" oninput="fetchUserId()">
-            </div>
-            <div class="form-group">
-                <label for="trafficThreshold">トラフィックしきい値 (Mbps)</label>
-                <input type="number" id="trafficThreshold" name="trafficThreshold" required>
-            </div>
-            <div class="form-group">
-                <label for="searchCount">検索件数</label>
-                <input type="number" id="searchCount" name="searchCount" value="30" required>
-            </div>
-            <div class="form-group">
-                <label for="searchTimeout">検索タイムアウト (秒)</label>
-                <input type="number" id="searchTimeout" name="searchTimeout" value="60" required>
-            </div>
-            <button type="button" onclick="executeSearch()">検索実行</button>
-        </form>
-        <div id="results">
-            <h2>検索結果</h2>
-            <!-- 結果表示領域 -->
+        <h1>SO自動化システム</h1>
+        <div class="input-container">
+            <form id="searchForm">
+                <div class="form-group">
+                    <label for="startDate">開始の日付と時刻</label>
+                    <input type="datetime-local" id="startDate" name="startDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="endDate">終了の日付と時刻</label>
+                    <input type="datetime-local" id="endDate" name="endDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="ipAddress">IPアドレス</label>
+                    <input type="text" id="ipAddress" name="ipAddress" placeholder="任意" oninput="fetchUserId()">
+                </div>
+                <div class="form-group">
+                    <label for="trafficThreshold">トラフィックしきい値 (Mbps)</label>
+                    <input type="number" id="trafficThreshold" name="trafficThreshold" required>
+                </div>
+                <div class="form-group">
+                    <label for="searchCount">検索件数</label>
+                    <input type="number" id="searchCount" name="searchCount" value="30" required>
+                </div>
+                <div class="form-group">
+                    <label for="searchTimeout">検索タイムアウト (秒)</label>
+                    <input type="number" id="searchTimeout" name="searchTimeout" value="60" required>
+                </div>
+                <div class="form-group">
+                    <label>検索種別</label>
+                    <div>
+                        <input type="radio" id="dns" name="searchType" value="DNS" required>
+                        <label for="dns">DNS</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="other" name="searchType" value="その他" required>
+                        <label for="other">その他</label>
+                    </div>
+                </div>
+                <button type="button" onclick="executeSearch()">検索実行</button>
+                <button type="button" onclick="createStopSO()">停止SO作成</button>
+            </form>
         </div>
-        <button type="button" onclick="createStopSO()">停止SO作成</button>
+        <div id="results-container">
+            <div id="results">
+                <h2>検索結果</h2>
+                <!-- 結果表示領域 -->
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
