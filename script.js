@@ -19,12 +19,12 @@ function fetchUserIds() {
     }
 
     selectedRows.forEach(row => {
-        const userIdCell = row.parentElement.nextElementSibling.nextElementSibling;
+        const userIdCell = row.parentElement.parentElement.cells[3];
         const userId = generateRandomUserId();
         userIdCell.textContent = userId;
     });
 
-    alert('ユーザIDを取得しました。');
+    //alert('ユーザIDを取得しました。');
 }
 
 function generateMockResults() {
@@ -117,7 +117,7 @@ function createStopSO() {
 
     let allUserIdsExist = true;
     selectedRows.forEach(row => {
-        const userIdCell = row.parentElement.nextElementSibling.nextElementSibling.nextElementSibling;
+        const userIdCell = row.parentElement.parentElement.cells[3];
         if (userIdCell.textContent === '') {
             allUserIdsExist = false;
         }
@@ -134,7 +134,7 @@ function createStopSO() {
     let csvContent = `RADIUS, STP, ユーザID, MEGAEGG, 日付(YYYYMMDD99999999)\n`;
 
     selectedRows.forEach(row => {
-        const userId = row.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
+        const userId = row.parentElement.parentElement.cells[3].textContent;
         csvContent += `RADIUS, STP, ${userId}, MEGAEGG, ${timestamp}\n`;
     });
 
