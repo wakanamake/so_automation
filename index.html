@@ -11,44 +11,57 @@
         <h1>SO自動化システム</h1>
         <div class="input-container">
             <form id="searchForm">
-                <div class="form-group">
-                    <label for="startDate">開始の日付と時刻</label>
-                    <input type="datetime-local" id="startDate" name="startDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="endDate">終了の日付と時刻</label>
-                    <input type="datetime-local" id="endDate" name="endDate" required>
-                </div>
-                <div class="form-group">
-                    <label for="ipAddress">IPアドレス</label>
-                    <input type="text" id="ipAddress" name="ipAddress" placeholder="任意">
-                </div>
-                <div class="form-group">
-                    <label for="trafficThreshold">トラフィックしきい値 (Mbps)</label>
-                    <input type="number" id="trafficThreshold" name="trafficThreshold" required>
-                </div>
-                <div class="form-group">
-                    <label for="searchCount">検索件数</label>
-                    <input type="number" id="searchCount" name="searchCount" value="30" required>
-                </div>
-                <div class="form-group">
-                    <label for="searchTimeout">検索タイムアウト (秒)</label>
-                    <input type="number" id="searchTimeout" name="searchTimeout" value="60" required>
-                </div>
-                <div class="form-group">
-                    <label>検索種別</label>
-                    <div>
-                        <input type="radio" id="dns" name="searchType" value="DNS" required>
-                        <label for="dns">DNS</label>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate">開始の日付と時刻</label>
+                        <input type="datetime-local" id="startDate" name="startDate" required>
                     </div>
-                    <div>
-                        <input type="radio" id="internet" name="searchType" value="インターネット" required>
-                        <label for="internet">インターネット</label>
+                    <div class="form-group">
+                        <label for="endDate">終了の日付と時刻</label>
+                        <input type="datetime-local" id="endDate" name="endDate" required>
                     </div>
                 </div>
-                <button type="button" onclick="executeSearch()">IP検索</button>
-                <button type="button" onclick="fetchUserIds()">ID取得</button>
-                <button type="button" onclick="createStopSO()">遮断</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ipAddress">IPアドレス</label>
+                        <input type="text" id="ipAddress" name="ipAddress" placeholder="任意">
+                    </div>
+                    <div class="form-group">
+                        <label for="trafficThreshold">トラフィックしきい値 (Mbps)</label>
+                        <input type="number" id="trafficThreshold" name="trafficThreshold" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="searchCount">検索件数</label>
+                        <input type="number" id="searchCount" name="searchCount" value="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="searchTimeout">検索タイムアウト (秒)</label>
+                        <input type="number" id="searchTimeout" name="searchTimeout" value="60" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>検索種別</label>
+                        <div>
+                            <input type="radio" id="dns" name="searchType" value="DNS" required>
+                            <label for="dns">DNS</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>検索種別</label>
+                        <div>
+                            <input type="radio" id="internet" name="searchType" value="インターネット" required>
+                            <label for="internet">インターネット</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" onclick="executeSearch()">IP検索</button>
+                    <button type="button" onclick="fetchUserIds()">ID取得</button>
+                    <button type="button" onclick="createStopSO()">遮断</button>
+                </div>
             </form>
         </div>
         <div id="results-container">

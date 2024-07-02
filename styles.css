@@ -6,19 +6,34 @@ body {
 }
 
 .container {
-    width: 80%;
+    width: 90%;
     margin: 20px auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2 {
+h1 {
     text-align: center;
 }
 
-.form-group {
+.input-container {
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 15px;
+}
+
+.form-group {
+    flex: 1;
+    margin-right: 15px;
+}
+
+.form-group:last-child {
+    margin-right: 0;
 }
 
 label {
@@ -27,7 +42,6 @@ label {
 }
 
 input[type="text"],
-input[type="date"],
 input[type="datetime-local"],
 input[type="number"] {
     width: calc(100% - 22px);
@@ -40,6 +54,7 @@ button {
     display: inline-block;
     padding: 10px 20px;
     margin-top: 10px;
+    margin-right: 10px;
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -49,6 +64,14 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+#results-container {
+    margin-top: 20px;
+}
+
+#results {
+    margin-top: 20px;
 }
 
 table {
@@ -66,7 +89,28 @@ th, td {
     text-align: left;
 }
 
-tr.selected {
-    background-color: #007bff;
-    color: white;
+th {
+    background-color: #f8f8f8;
+}
+
+#selectAll {
+    margin-right: 5px;
+}
+
+.selectRow {
+    margin-right: 5px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-buttons button {
+    flex: 1;
+    margin-right: 15px;
+}
+
+.form-buttons button:last-child {
+    margin-right: 0;
 }
