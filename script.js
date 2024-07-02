@@ -2,36 +2,35 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // 初期設定などを行う
 });
 
-function fetchUserId() {
-    const ipAddress = document.getElementById('ipAddress').value;
+function fetchUserIds() {
+    const selectedRows = document.querySelectorAll('.selectRow:checked');
+    if (selectedRows.length === 0) {
+        alert('IDを取得するには、エントリを選択してください。');
+        return;
+    }
 
-    // ここで実際のIPアドレスに基づくユーザIDを取得する処理を追加
-    // ダミーデータを使用した例
-    const userIdMap = {
-        '192.168.1.1': 'userA',
-        '192.168.1.2': 'userB',
-        '192.168.1.3': 'userC'
-    };
+    let userIds = [];
+    selectedRows.forEach(row => {
+        const userId = row.parentElement.nextElementSibling.nextElementSibling.textContent;
+        userIds.push(userId);
+    });
 
-    const userId = userIdMap[ipAddress] || '不明なユーザ';
-    // ユーザIDを使用する場合は、必要に応じてこの値を利用
-    console.log('User ID:', userId);
+    alert(`取得したユーザID: ${userIds.join(', ')}`);
 }
 
 function generateMockResults() {
     const mockResults = [];
-    for (let i = 1; i <= 200; i++) {
+    for (let i = 1; i <= 50; i++) {
         mockResults.push({
             ip: `192.168.1.${i}`,
             userId: `user${i}`,
-            traffic: Math.floor(Math.random() * 1000) + 1 // トラフィック量を1から1000 Mbpsの範囲でランダムに設定
+            traffic: Math.floor(Math.random() * 100) + 1 // トラフィック量を1から100 Mbpsの範囲でランダムに設定
         });
     }
     return mockResults;
 }
 
 function executeSearch() {
-    // 検索ロジックの実装
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
     const ipAddress = document.getElementById('ipAddress').value;
@@ -39,20 +38,22 @@ function executeSearch() {
     const searchCount = parseInt(document.getElementById('searchCount').value);
     const searchTimeout = document.getElementById('searchTimeout').value;
 
-    // 仮の検索結果データを生成
+    const searchType = document.querySelector('input[name="searchType"]:checked');
+    if (!searchType) {
+        alert('「DNS」または「その他」を選択してください。');
+        return;
+    }
+
     let mockResults = generateMockResults();
 
-    // IPアドレスでフィルタリング
     if (ipAddress) {
         mockResults = mockResults.filter(result => result.ip === ipAddress);
     }
 
-    // トラフィックしきい値でフィルタリング
     if (!isNaN(trafficThreshold)) {
         mockResults = mockResults.filter(result => result.traffic >= trafficThreshold);
     }
 
-    // 検索結果の表示
     let resultsHtml = '';
 
     if (mockResults.length === 0) {
@@ -62,9 +63,9 @@ function executeSearch() {
             <table>
                 <thead>
                     <tr>
+                        <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"> 全選択</th>
                         <th>IPアドレス</th>
-                        <th>ユーザID</th>
-                        <th>トラフィック量 (Mbps)</th>
+                        <th>通信量 (Mbps)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,9 +73,9 @@ function executeSearch() {
 
         mockResults.slice(0, searchCount).forEach((result, index) => {
             resultsHtml += `
-                <tr onclick="selectRow(this)" data-index="${index}">
+                <tr>
+                    <td><input type="checkbox" class="selectRow"></td>
                     <td>${result.ip}</td>
-                    <td>${result.userId}</td>
                     <td>${result.traffic}</td>
                 </tr>
             `;
@@ -89,32 +90,29 @@ function executeSearch() {
     document.getElementById('results').innerHTML = resultsHtml;
 }
 
-function selectRow(row) {
-    // 他の選択を解除
-    const rows = document.querySelectorAll('#results tr');
-
-    if (row.classList.contains('selected')) {
-        row.classList.remove('selected');
-    } else {
-        rows.forEach(r => r.classList.remove('selected'));
-        row.classList.add('selected');
-    }
+function toggleSelectAll(selectAllCheckbox) {
+    const checkboxes = document.querySelectorAll('.selectRow');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAllCheckbox.checked;
+    });
 }
 
 function createStopSO() {
-    // 選択されたエントリを取得
-    const selectedRow = document.querySelector('#results tr.selected');
-    if (!selectedRow) {
-        alert('停止SOを作成するには、エントリを選択してください。');
+    const selectedRows = document.querySelectorAll('.selectRow:checked');
+    if (selectedRows.length === 0) {
+        alert('遮断するには、エントリを選択してください。');
         return;
     }
 
-    const userId = selectedRow.cells[1].textContent;
     const now = new Date();
     const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
 
-    const csvContent = `RADIUS, STP, ${userId}, MEGAEGG, ${timestamp}`;
-    
-    // アラートメッセージにCSVの内容を出力
+    let csvContent = `RADIUS, STP, ユーザID, MEGAEGG, 日付(YYYYMMDD99999999)\n`;
+
+    selectedRows.forEach(row => {
+        const userId = row.parentElement.nextElementSibling.nextElementSibling.textContent;
+        csvContent += `RADIUS, STP, ${userId}, MEGAEGG, ${timestamp}\n`;
+    });
+
     alert(`SO内容：\n${csvContent}`);
 }

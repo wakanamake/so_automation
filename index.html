@@ -21,7 +21,7 @@
                 </div>
                 <div class="form-group">
                     <label for="ipAddress">IPアドレス</label>
-                    <input type="text" id="ipAddress" name="ipAddress" placeholder="任意" oninput="fetchUserId()">
+                    <input type="text" id="ipAddress" name="ipAddress" placeholder="任意">
                 </div>
                 <div class="form-group">
                     <label for="trafficThreshold">トラフィックしきい値 (Mbps)</label>
@@ -46,13 +46,17 @@
                         <label for="other">その他</label>
                     </div>
                 </div>
-                <button type="button" onclick="executeSearch()">検索実行</button>
-                <button type="button" onclick="createStopSO()">停止SO作成</button>
+                <button type="button" onclick="executeSearch()">IP検索</button>
+                <button type="button" onclick="fetchUserIds()">ID取得</button>
+                <button type="button" onclick="createStopSO()">遮断</button>
             </form>
         </div>
         <div id="results-container">
             <div id="results">
                 <h2>検索結果</h2>
+                <div>
+                    <label><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"> 全選択</label>
+                </div>
                 <!-- 結果表示領域 -->
             </div>
         </div>
