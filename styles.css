@@ -25,26 +25,28 @@ h1 {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
+    align-items: center; /* Align items vertically centered */
 }
 
 .form-group {
     flex: 1;
+    display: flex;
+    align-items: center; /* Align items vertically centered */
     margin-right: 15px;
+}
+
+.form-group label {
+    margin-right: 10px; /* Space between label and input */
 }
 
 .form-group:last-child {
     margin-right: 0;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
 input[type="text"],
 input[type="datetime-local"],
 input[type="number"] {
-    width: calc(100% - 22px);
+    flex: 1; /* Let the input take the remaining space */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
