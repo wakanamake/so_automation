@@ -25,18 +25,18 @@ h1 {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
-    align-items: center; /* Align items vertically centered */
+    align-items: center;
 }
 
 .form-group {
     flex: 1;
     display: flex;
-    align-items: center; /* Align items vertically centered */
+    align-items: center;
     margin-right: 15px;
 }
 
 .form-group label {
-    margin-right: 10px; /* Space between label and input */
+    margin-right: 10px;
 }
 
 .form-group:last-child {
@@ -46,7 +46,7 @@ h1 {
 input[type="text"],
 input[type="datetime-local"],
 input[type="number"] {
-    flex: 1; /* Let the input take the remaining space */
+    flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -106,11 +106,13 @@ th {
 .form-buttons {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
 }
 
 .form-buttons button {
     flex: 1;
     margin-right: 15px;
+    margin-top: 10px;
 }
 
 .form-buttons button:last-child {

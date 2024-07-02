@@ -33,7 +33,8 @@ function generateMockResults() {
         mockResults.push({
             ip: `192.168.1.${i}`,
             traffic: Math.floor(Math.random() * 100) + 1, // トラフィック量を1から100 Mbpsの範囲でランダムに設定
-            userId: '' // 初期状態ではユーザIDは空
+            userId: '', // 初期状態ではユーザIDは空
+            status: '' // 初期状態では状態は空
         });
     }
     return mockResults;
@@ -76,6 +77,7 @@ function executeSearch() {
                         <th>IPアドレス</th>
                         <th>通信量 (Mbps)</th>
                         <th>ユーザID</th>
+                        <th>状態</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,6 +90,7 @@ function executeSearch() {
                     <td>${result.ip}</td>
                     <td>${result.traffic}</td>
                     <td>${result.userId}</td>
+                    <td>${result.status}</td>
                 </tr>
             `;
         });
@@ -139,4 +142,65 @@ function createStopSO() {
     });
 
     alert(`SO内容：\n${csvContent}`);
+}
+
+function createReleaseSO() {
+    const selectedRows = document.querySelectorAll('.selectRow:checked');
+    if (selectedRows.length === 0) {
+        alert('解除するには、エントリを選択してください。');
+        return;
+    }
+
+    let allUserIdsExist = true;
+    selectedRows.forEach(row => {
+        const userIdCell = row.parentElement.parentElement.cells[3];
+        if (userIdCell.textContent === '') {
+            allUserIdsExist = false;
+        }
+    });
+
+    if (!allUserIdsExist) {
+        alert('すべての選択したエントリに対してユーザIDを取得してください。');
+        return;
+    }
+
+    const now = new Date();
+    const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+
+    let csvContent = `RADIUS, STP, ユーザID, MEGAEGG, 日付(YYYYMMDD99999999)\n`;
+
+    selectedRows.forEach(row => {
+        const userId = row.parentElement.parentElement.cells[3].textContent;
+        csvContent += `RADIUS, STP, ${userId}, MEGAEGG, ${timestamp}\n`;
+    });
+
+    alert(`解除SO内容：\n${csvContent}`);
+}
+
+function fetchStatus() {
+    const selectedRows = document.querySelectorAll('.selectRow:checked');
+    if (selectedRows.length === 0) {
+        alert('状態を取得するには、エントリを選択してください。');
+        return;
+    }
+
+    let allUserIdsExist = true;
+    selectedRows.forEach(row => {
+        const userIdCell = row.parentElement.parentElement.cells[3];
+        if (userIdCell.textContent === '') {
+            allUserIdsExist = false;
+        }
+    });
+
+    if (!allUserIdsExist) {
+        alert('すべての選択したエントリに対してユーザIDを取得してください。');
+        return;
+    }
+
+    selectedRows.forEach(row => {
+        const statusCell = row.parentElement.parentElement.cells[4];
+        statusCell.textContent = Math.random() > 0.5 ? '通信中' : '停止中';
+    });
+
+    //alert('状態を取得しました。');
 }
