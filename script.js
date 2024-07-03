@@ -2,6 +2,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // 初期設定などを行う
 });
 
+let logs = [];
+
+function logAction(action, result) {
+    const timestamp = new Date().toLocaleString();
+    logs.push(`[${timestamp}] ${action}: ${result}`);
+    if (logs.length > 100) {
+        logs.shift();
+    }
+}
+
 function generateRandomUserId() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let userId = '';
@@ -15,6 +25,7 @@ function fetchUserIds() {
     const selectedRows = document.querySelectorAll('.selectRow:checked');
     if (selectedRows.length === 0) {
         alert('IDを取得するには、エントリを選択してください。');
+        logAction('ID取得', 'エントリが選択されていません');
         return;
     }
 
@@ -24,7 +35,7 @@ function fetchUserIds() {
         userIdCell.textContent = userId;
     });
 
-    //alert('ユーザIDを取得しました。');
+    logAction('ID取得', `取得したユーザID数: ${selectedRows.length}`);
 }
 
 function generateMockResults() {
@@ -51,6 +62,7 @@ function executeSearch() {
     const searchType = document.querySelector('input[name="searchType"]:checked');
     if (!searchType) {
         alert('「DNS」または「インターネット」を選択してください。');
+        logAction('IP検索', '検索種別が選択されていません');
         return;
     }
 
@@ -102,6 +114,7 @@ function executeSearch() {
     }
 
     document.getElementById('results').innerHTML = resultsHtml;
+    logAction('IP検索', `検索結果: ${mockResults.length}件`);
 }
 
 function toggleSelectAll(selectAllCheckbox) {
@@ -115,19 +128,32 @@ function createStopSO() {
     const selectedRows = document.querySelectorAll('.selectRow:checked');
     if (selectedRows.length === 0) {
         alert('遮断するには、エントリを選択してください。');
+        logAction('遮断', 'エントリが選択されていません');
         return;
     }
 
     let allUserIdsExist = true;
+    let allStatusesValid = true;
     selectedRows.forEach(row => {
         const userIdCell = row.parentElement.parentElement.cells[3];
+        const statusCell = row.parentElement.parentElement.cells[4];
         if (userIdCell.textContent === '') {
             allUserIdsExist = false;
+        }
+        if (statusCell.textContent !== '通信中') {
+            allStatusesValid = false;
         }
     });
 
     if (!allUserIdsExist) {
         alert('すべての選択したエントリに対してユーザIDを取得してください。');
+        logAction('遮断', 'ユーザIDが取得されていないエントリがあります');
+        return;
+    }
+
+    if (!allStatusesValid) {
+        alert('すべての選択したエントリが通信中であることを確認してください。');
+        logAction('遮断', '通信中でないエントリがあります');
         return;
     }
 
@@ -142,25 +168,39 @@ function createStopSO() {
     });
 
     alert(`SO内容：\n${csvContent}`);
+    logAction('遮断', `生成されたSO数: ${selectedRows.length}`);
 }
 
 function createReleaseSO() {
     const selectedRows = document.querySelectorAll('.selectRow:checked');
     if (selectedRows.length === 0) {
         alert('解除するには、エントリを選択してください。');
+        logAction('解除', 'エントリが選択されていません');
         return;
     }
 
     let allUserIdsExist = true;
+    let allStatusesValid = true;
     selectedRows.forEach(row => {
         const userIdCell = row.parentElement.parentElement.cells[3];
+        const statusCell = row.parentElement.parentElement.cells[4];
         if (userIdCell.textContent === '') {
             allUserIdsExist = false;
+        }
+        if (statusCell.textContent !== '停止中') {
+            allStatusesValid = false;
         }
     });
 
     if (!allUserIdsExist) {
         alert('すべての選択したエントリに対してユーザIDを取得してください。');
+        logAction('解除', 'ユーザIDが取得されていないエントリがあります');
+        return;
+    }
+
+    if (!allStatusesValid) {
+        alert('すべての選択したエントリが停止中であることを確認してください。');
+        logAction('解除', '停止中でないエントリがあります');
         return;
     }
 
@@ -175,12 +215,14 @@ function createReleaseSO() {
     });
 
     alert(`解除SO内容：\n${csvContent}`);
+    logAction('解除', `生成された解除SO数: ${selectedRows.length}`);
 }
 
 function fetchStatus() {
     const selectedRows = document.querySelectorAll('.selectRow:checked');
     if (selectedRows.length === 0) {
         alert('状態を取得するには、エントリを選択してください。');
+        logAction('状態取得', 'エントリが選択されていません');
         return;
     }
 
@@ -194,6 +236,7 @@ function fetchStatus() {
 
     if (!allUserIdsExist) {
         alert('すべての選択したエントリに対してユーザIDを取得してください。');
+        logAction('状態取得', 'ユーザIDが取得されていないエントリがあります');
         return;
     }
 
@@ -202,5 +245,12 @@ function fetchStatus() {
         statusCell.textContent = Math.random() > 0.5 ? '通信中' : '停止中';
     });
 
-    //alert('状態を取得しました。');
+    logAction('状態取得', `取得した状態数: ${selectedRows.length}`);
+}
+
+function showLogs() {
+    const logWindow = window.open('', 'logWindow', 'width=600,height=400');
+    logWindow.document.write('<html><head><title>動作ログ</title></head><body>');
+    logWindow.document.write('<h1>動作ログ</h1><pre>' + logs.join('\n') + '</pre>');
+    logWindow.document.write('</body></html>');
 }
